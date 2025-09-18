@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+
+	void ShowInfo() {
+	printf("Info : ");
+	
+	}
+
+	void AddMore() {
+	printf("Name : ");
+	
+	}
+
+	void Search() {
+	printf("Search For : ");
+	
+	}
+
+	void Update() {
+	printf("Updating");
+	
+	}
+
+	void DeleteMore() {
+	printf("What number : ");
+	
+	}
+
+
+int main()
+{
+	while(1){
+	int choice;
+	int invalid;
+//	system("clear");
+	printf("\nVery Nice Display Menu For Internship\n");
+	printf("Show   (1)\n");
+	printf("Add    (2)\n");
+	printf("Search (3)\n");
+	printf("Update (4)\n");
+	printf("Delete (5)\n");
+	printf("Exit   (6)\n\n");	
+
+	if(invalid){
+	printf("\033[31mInvalid Press Enter to Continue\033[0m\n");
+	getchar();
+	}
+
+	invalid=0;
+
+	printf("Choose one : ");
+	scanf("%d",&choice);
+//	printf("%d",choice);
+
+
+	switch (choice) {
+
+	case 1:
+	ShowInfo();
+	break;
+
+	case 2:
+	AddMore();
+	break;
+
+	case 3:
+	Search();
+	break;
+
+	case 4:
+	Update();
+	break;
+	
+	case 5:
+	DeleteMore();
+	break;
+
+	case 6:
+	return 0;
+	
+	default:
+	invalid=1;
+	continue;
+}
+//	return 0;
+
+}
+}

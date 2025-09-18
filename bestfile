@@ -28,13 +28,30 @@
 	
 	}
 
+	typedef struct 
+	{
+	char EmployeeName[50];
+	char TrainingCourse[50];
+	char StartDate[50];
+	char EndDate[50];
+	} internship;
 
 int main()
 {
-	while(1){
-	int choice;
 	int invalid;
-//	system("clear");
+	system("clear");
+
+	internship student1;
+
+	while(1){
+	system("clear");
+
+	if(invalid){
+	printf("\033[31mInvalid Press Enter to Continue\033[0m");
+	getchar();
+	}
+
+	int choice;
 	printf("\nVery Nice Display Menu For Internship\n");
 	printf("Show   (1)\n");
 	printf("Add    (2)\n");
@@ -42,11 +59,6 @@ int main()
 	printf("Update (4)\n");
 	printf("Delete (5)\n");
 	printf("Exit   (6)\n\n");	
-
-	if(invalid){
-	printf("\033[31mInvalid Press Enter to Continue\033[0m\n");
-	getchar();
-	}
 
 	invalid=0;
 

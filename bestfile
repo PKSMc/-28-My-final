@@ -2,16 +2,66 @@
 #include<stdlib.h>
 #include<string.h>
 
+	struct Internship {
+        char EmployeeName[50];
+    	char TrainingCourse[50];
+	char StartDate[50];
+    	char EndDate[50];
+	};
 
-	void ShowInfo() {
-	printf("Info : ");
+	struct Internship entry;
+	char Name[50];
+
+	void ShowInformation() {
+	FILE *fp = fopen("internship.csv", "r");
+    	char line[256];
+
+    	if (fp == NULL) {
+        printf("No data yet.\n");
+        return;
+    }
+
+    printf("All Records:\n");
+    while (fgets(line, sizeof(line), fp)) {
+        printf("%s", line);  // each line is already CSV-formatted
+    }
+
+    fclose(fp);
+}
 	
-	}
+
 
 	void AddMore() {
-	printf("Name : ");
+	system("clear");
+        printf("Adding New Member\n");
+    
+        printf("Employee Name : ");
+        scanf("%49s", entry.EmployeeName);  // use %49s to avoid overflow
+    
+        printf("Training Course : ");
+        scanf("%49s", entry.TrainingCourse);
+    
+        printf("Start Date : ");
+        scanf("%49s", entry.StartDate);
+    
+        printf("End Date : ");
+        scanf("%49s", entry.EndDate);
+    
+        // Append to CSV
+        FILE *fp = fopen("internship.csv", "a");  // append mode
+        if (fp != NULL) {
+        fprintf(fp, "%s,%s,%s,%s\n",
+            entry.EmployeeName,
+            entry.TrainingCourse,
+            entry.StartDate,
+            entry.EndDate);
+        fclose(fp);
+        printf("Saved to internship.csv\n");
+    } else {
+        printf("Error: Could not open file!\n");
+    }
+}
 	
-	}
 
 	void Search() {
 	printf("Search For : ");
@@ -28,30 +78,24 @@
 	
 	}
 
-	typedef struct 
-	{
-	char EmployeeName[50];
-	char TrainingCourse[50];
-	char StartDate[50];
-	char EndDate[50];
-	} internship;
-
 int main()
 {
-	int invalid;
-	system("clear");
 
-	internship student1;
 
-	while(1){
-	system("clear");
 
-	if(invalid){
-	printf("\033[31mInvalid Press Enter to Continue\033[0m");
-	getchar();
-	}
 
 	int choice;
+	int invalid=0;
+
+	while(1){
+
+	if(invalid){
+	printf("\033[31mInvalid Number!\033[0m");
+	getchar();
+	invalid=0;
+	}
+
+	system("clear");
 	printf("\nVery Nice Display Menu For Internship\n");
 	printf("Show   (1)\n");
 	printf("Add    (2)\n");
@@ -59,18 +103,13 @@ int main()
 	printf("Update (4)\n");
 	printf("Delete (5)\n");
 	printf("Exit   (6)\n\n");	
-
-	invalid=0;
-
 	printf("Choose one : ");
 	scanf("%d",&choice);
-//	printf("%d",choice);
-
-
-	switch (choice) {
-
+	
+	switch (choice)
+{
 	case 1:
-	ShowInfo();
+	ShowInformation();
 	break;
 
 	case 2:
@@ -92,11 +131,15 @@ int main()
 	case 6:
 	return 0;
 	
-	default:
+	default:{
 	invalid=1;
 	continue;
+		}
+	
 }
-//	return 0;
+//	printf("Test tTest");
+}
+}
 
-}
-}
+
+

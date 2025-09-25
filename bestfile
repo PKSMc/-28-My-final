@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include<string.h>
 
+	//ระบบจัดการข้อมูลการฝึกอบรมพนักงาน
+
 	struct Internship {
         char EmployeeName[50];
     	char TrainingCourse[50];
@@ -15,32 +17,39 @@
 	void ShowInformation() {
 	FILE *fp = fopen("internship.csv", "r");
     	char line[256];
+    	int lineNo = 0;
 
     	if (fp == NULL) {
         printf("No data yet.\n");
-        return;
-    }
+    	} else {
+        printf("All Records:\n");
+        printf("EmployeeName,TrainingCourse,StartDate,EndDate\n");
+        while (fgets(line, sizeof(line), fp)) {
+            lineNo++;
+            printf("%d. %s", lineNo, line);  
+            // each line already ends with '\n'
+        }
+        fclose(fp);
+    	}
 
-    printf("All Records:\n");
-    while (fgets(line, sizeof(line), fp)) {
-        printf("%s", line);  // each line is already CSV-formatted
-    }
-
-    fclose(fp);
-}
-	
-
+    	// Pause until user presses Enter
+   	printf("\nPress Enter to continue...");
+   	getchar();  // consume leftover newline
+   	getchar();  // wait for Enter
+	}
 
 	void AddMore() {
 	system("clear");
         printf("Adding New Member\n");
     
         printf("Employee Name : ");
-        scanf("%49s", entry.EmployeeName);  // use %49s to avoid overflow
-    
+	scanf(" %49[^\n]", entry.EmployeeName);    
+
         printf("Training Course : ");
         scanf("%49s", entry.TrainingCourse);
     
+
+        printf("Format : yyyy-mm-dd\n");
         printf("Start Date : ");
         scanf("%49s", entry.StartDate);
     
@@ -57,10 +66,10 @@
             entry.EndDate);
         fclose(fp);
         printf("Saved to internship.csv\n");
-    } else {
+    	} else {
         printf("Error: Could not open file!\n");
-    }
-}
+    	}
+	}
 	
 
 	void Search() {
@@ -69,15 +78,124 @@
 	}
 
 	void Update() {
-	printf("Updating");
+	int target, lineNo = 0, found = 0;
+	char line[256];
+	struct Internship newEntry;
 	
-	}
-
-	void DeleteMore() {
-	printf("What number : ");
+	// Show all records first
+	ShowInformation();
 	
+	printf("Enter record number to update: ");
+	scanf("%d", &target);
+	getchar();	
+	FILE *fp = fopen("internship.csv", "r");
+	FILE *temp = fopen("temp.csv", "w");
+	
+	if (fp == NULL || temp == NULL) {
+	    printf("Error opening file!\n");
+	    return;
 	}
+	
+	while (fgets(line, sizeof(line), fp)) {
+	    lineNo++;
+	    if (lineNo == target) 
+	    {
+            found = 1;
+            // Get new info
+            printf("Enter new Employee Name: ");
+            scanf("%49[\n]", newEntry.EmployeeName);
 
+            printf("Enter new Training Course: ");
+            scanf("%49s", newEntry.TrainingCourse);
+
+            printf("Enter new Start Date: ");
+            scanf("%49s", newEntry.StartDate);
+
+            printf("Enter new End Date: ");
+            scanf("%49s", newEntry.EndDate);
+
+            // Write updated line
+            fprintf(temp, "%s,%s,%s,%s\n",
+                    newEntry.EmployeeName,
+                    newEntry.TrainingCourse,
+                    newEntry.StartDate,
+                    newEntry.EndDate);
+            } else 
+	    {
+            fputs(line, temp);  // copy unchanged line
+            }
+            }
+
+	    fclose(fp);
+	    fclose(temp);
+	
+	    remove("internship.csv");
+	    rename("temp.csv", "internship.csv");
+	
+	    if (found) {
+	        printf("Record %d updated successfully.\n", target);
+	    } else {
+	        printf("No record found at number %d.\n", target);
+	    }
+	
+	    printf("\nPress Enter to continue...");
+	    getchar(); getchar();	
+		}
+	
+		void DeleteMore() {
+		    int target, lineNo = 0, found = 0;
+	    char line[256];
+	
+	    printf("Enter record number to delete: ");
+	    scanf("%d", &target);
+	
+	    FILE *fp = fopen("internship.csv", "r");
+	    FILE *temp = fopen("temp.csv", "w");
+	
+	    if (fp == NULL || temp == NULL) {
+	        printf("Error opening file!\n");
+	        return;
+	    }
+	
+	    // Copy all lines except the one to delete
+	    while (fgets(line, sizeof(line), fp)) {
+	        lineNo++;
+	        if (lineNo == target) {
+	            found = 1;   // skip writing this line
+	            continue;
+	        }
+	        fputs(line, temp);
+	    }
+	
+	    fclose(fp);
+	    fclose(temp);
+	
+	    // Replace old file with new one
+	    remove("internship.csv");
+	    rename("temp.csv", "internship.csv");
+	
+	    if (found) {
+	        printf("Record %d deleted successfully.\n\n", target);
+	
+	        // Show updated list
+	        fp = fopen("internship.csv", "r");
+	        lineNo = 0;
+	        if (fp != NULL) {
+	            printf("Updated Records:\n");
+	            while (fgets(line, sizeof(line), fp)) {
+	                lineNo++;
+	                printf("%d. %s", lineNo, line);
+	            }
+	            fclose(fp);
+	        }
+	    } else {
+	        printf("No record found at number %d.\n", target);
+	    }
+	
+	    printf("\nPress Enter to continue...");
+	    getchar(); getchar();
+		}
+	
 int main()
 {
 
